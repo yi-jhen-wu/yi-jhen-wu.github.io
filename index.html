@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <meta charset="UTF-8">
   <!-- ✅ viewport: 讓網頁在手機與平板上能正確縮放，這是 RWD (響應式設計) 的核心設定 -->
@@ -14,6 +15,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
+    /* =========================================
+      1. 全域色彩與滑動設定
+       ========================================= */
     :root {
       --primary: #6B4E31;
       --secondary: #8B5F3A;
@@ -21,26 +25,51 @@
       --beige: #F8F1E9;
       --light-beige: #FFF9F0;
       --dark-text: #3F2A1E;
+
+      scroll-behavior: smooth;
+      /* ✅ smooth: 使用者點擊 #id 連結時，頁面會平滑捲移，而不是突然跳到位置 */
     }
 
+    /* =========================================
+      2. 文字與背景設定
+       ========================================= */
     body {
       font-family: 'Noto Sans TC', system-ui, sans-serif;
       background-color: var(--beige);
       color: var(--dark-text);
       line-height: 1.7;
-      padding-top: 80px;
+      padding-top: 50px;
+      /* 50px 的上方間距，讓 fixed-top 的導覽列不會遮住頁面內容 */
     }
 
+    /* =========================================
+      3. 導覽列樣式
+       ========================================= */
     .navbar {
       background-color: var(--primary) !important;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      /* 淡淡陰影讓導覽列視覺上與內容分離 */
     }
 
+    .nav-link {
+      color: white !important;
+      transition: color 0.3s ease;
+      /* 讓滑鼠移過時顏色變化有平滑過渡 */
+    }
+
+    .nav-link:hover {
+      color: var(--accent) !important;
+    }
+
+    /* =========================================
+      4. 區塊標題裝飾
+       ========================================= */
     .section-title {
       color: var(--primary);
       position: relative;
       display: inline-block;
       margin-bottom: 3rem;
+      /* 下方空間讓區段標題與內容分離，不會太擁擠 */
     }
 
     .section-title::after {
@@ -51,8 +80,20 @@
       background: var(--accent);
       bottom: -12px;
       left: 0;
+      /* 底部的強調線條，讓標題更有設計感 */
     }
 
+    /* =========================================
+      5. 區塊定位補償
+       ========================================= */
+    section[id] {
+      scroll-margin-top: 50px;
+      /* 點選導覽列後，區塊會自動往下移 50px，避免被固定導覽列遮到 */
+    }
+
+    /* =========================================
+      6. 圖片與文章卡片效果
+       ========================================= */
     .article-img {
       border-radius: 20px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
@@ -60,10 +101,12 @@
       height: auto;
       margin-bottom: 15px;
       transition: transform 0.3s ease;
+      /* hover 時會有平滑上浮動畫 */
     }
 
     .article-img:hover {
       transform: translateY(-3px);
+      /* 微微向上漂浮，增加互動感 */
     }
 
     .card {
@@ -71,52 +114,83 @@
       border: none;
       box-shadow: 0 4px 15px rgba(107, 78, 49, 0.1);
       transition: all 0.3s;
+      /* 卡片 hover 時使用過渡效果 */
     }
 
     .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 15px 30px rgba(107, 78, 49, 0.15);
+      /* 卡片 hover 時拉出更強的立體感 */
     }
 
     .btn-primary {
       background-color: var(--primary);
       border-color: var(--primary);
+      /* 按鈕使用主要色調，與整體配色一致 */
     }
+
     .btn-primary:hover {
       background-color: var(--secondary);
       border-color: var(--secondary);
+      /* hover 顏色比主色淡一點，提供視覺回饋 */
     }
 
+    /* =========================================
+      7. 技能進度條樣式
+       ========================================= */
     .skill-bar {
       height: 12px;
       background: #EDE4D5;
       border-radius: 9999px;
       overflow: hidden;
+      /* 圓角進度條讓技能欄看起來更溫柔 */
     }
+
     .skill-progress {
       height: 100%;
       background: linear-gradient(to right, var(--primary), var(--accent));
+      /* 漸層色讓技能進度更有深度，不只是單色 */
     }
 
+    /* =========================================
+      8. 連結樣式
+       ========================================= */
+    a {
+      color: var(--secondary);
+      text-decoration: none;
+      /* 預設移除底線，保持整體簡潔 */
+    }
+
+    a:hover {
+      color: var(--primary);
+      text-decoration: underline;
+      /* 滑鼠移過時加底線提示可點擊 */
+    }
+
+    /* =========================================
+      9. 頁尾樣式
+       ========================================= */
     footer {
       background-color: var(--primary);
+      padding: 40px 0;
+      /* 讓頁尾高度足夠，內容不會太擠 */
     }
 
-    a { color: var(--secondary); }
-    a:hover { color: var(--primary); }
-
-    .nav-link {
-      color: white !important;
+    footer a {
+      color: #FFF9F0;
     }
-    .nav-link:hover {
-      color: var(--accent) !important;
+
+    footer a:hover {
+      color: #C19A6B;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Navbar -->
+  <!-- 🧭 導覽列 -->
+  <!-- navbar-expand-lg: 寬螢幕時展開，窄螢幕時收合成漢堡按鈕 -->
+  <!-- fixed-top: 讓導覽列固定在畫面頂端，滑動時仍可快速切換區塊 -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">吳宜蓁</a>
@@ -138,39 +212,46 @@
     </div>
   </nav>
 
-  <!-- 自我介紹 -->
-  <section id="about" class="my-5">
+  <!-- 🧑‍💻 自我介紹區塊 -->
+  <!-- container: 內容置中並保持左右留白 -->
+  <!-- row align-items-center: 讓圖片與文字在垂直方向置中對齊 -->
+  <section id="about" class="py-5">
     <div class="container">
       <h2 class="section-title text-center">自我介紹</h2>
       <div class="row align-items-center g-5">
+        <!-- col-lg-4: 大螢幕顯示 4/12 寬度，手機版自動堆疊 -->
         <div class="col-lg-4 text-center">
           <img src="images/me3.png" alt="吳宜蓁" class="img-fluid article-img" style="border: 8px solid #FFF9F0;">
         </div>
+        <!-- col-lg-8: 文字說明區，佔比 8/12 -->
         <div class="col-lg-8">
           <p>就讀於國立聯合大學資訊管理學系，對網頁設計、前端開發與資料分析充滿熱情。希望透過技術與設計創造更友善的使用者體驗。</p>
           <p><strong>興趣：</strong> 網路管理、網頁設計、大數據分析、閱讀<br>
-              <strong>目標：</strong> 成為具備專業技術與美學素養的數位產品設計者</p>
+            <strong>目標：</strong> 成為具備專業技術與美學素養的數位產品設計者
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 教育背景 -->
+  <!-- 🎓 教育背景區塊 -->
+  <!-- bg-light: 淺色背景幫助視覺分區 -->
   <section id="education" class="py-5 bg-light">
     <div class="container">
       <h2 class="section-title text-center">教育背景</h2>
       <div class="row justify-content-center">
         <div class="col-lg-8">
+          <!-- card: Bootstrap 卡片，讓內容更有分隔與層次 -->
           <div class="card p-4">
             <h5>國立聯合大學 - 資訊管理學系</h5>
             <p class="text-muted">2024 年至今（預計畢業2028年）</p>
             <p>重要課程：程式設計、資料結構、資料庫系統管理、網頁程式設計。</p>
             <p>選修課程：<br>
-              <ul>
-                <li>一下：人工智慧概論</li>
-                <li>二上：網路管理、營運決策與大數據</li>
-                <li>二下：行動應用程式設計、網路規劃與分析、前端網頁程式設計</li>
-              </ul>
+            <ul>
+              <li>一下：人工智慧概論</li>
+              <li>二上：網路管理、營運決策與大數據</li>
+              <li>二下：行動應用程式設計、網路規劃與分析、前端網頁程式設計</li>
+            </ul>
             </p>
           </div>
         </div>
@@ -178,11 +259,13 @@
     </div>
   </section>
 
-  <!-- 經驗與實習 -->
+  <!-- 💼 經驗與實習區塊 -->
+  <!-- py-5: 上下間距留白 5rem (Bootstrap spacing) -->
   <section id="experience" class="py-5">
     <div class="container">
       <h2 class="section-title text-center">經驗與實習</h2>
       <div class="row g-4">
+        <!-- col-md-6: 中型螢幕以上佔據 1/2 寬度 -->
         <div class="col-md-6">
           <div class="card h-100">
             <div class="card-body">
@@ -196,11 +279,13 @@
     </div>
   </section>
 
-  <!-- 專業技能 -->
+  <!-- 🧠 專業技能區塊 -->
+  <!-- bg-light: 淺色背景與上一個區段做視覺區隔 -->
   <section id="skills" class="py-5 bg-light">
     <div class="container">
       <h2 class="section-title text-center">專業技能</h2>
       <div class="row g-4">
+        <!-- 每個技能卡片在不同裝置上會自動排版 -->
         <div class="col-md-6 col-lg-4">
           <h5>程式語言</h5>
           <div class="skill-bar mb-2">
@@ -226,15 +311,17 @@
     </div>
   </section>
 
-  <!-- 專案作品 -->
+  <!-- 🧩 專案作品區塊 -->
+  <!-- row-cols-1 row-cols-md-2 row-cols-lg-3: 不同寬度下顯示不同欄數 -->
   <section id="projects" class="py-5">
     <div class="container">
       <h2 class="section-title text-center">專案作品</h2>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <div class="col">
           <div class="card h-100 portfolio-card">
-            <img src="images/project1.png" class="card-img-top" alt="學生與課程管理應用程式" 
-                  style="height: 220px; object-fit: contain; background: #f8f1e9; padding: 10px;">
+            <!-- card-img-top: Bootstrap 卡片上方圖片樣式 -->
+            <img src="images/project1.png" class="card-img-top" alt="學生與課程管理應用程式"
+              style="height: 220px; object-fit: contain; background: #f8f1e9; padding: 10px;">
             <div class="card-body">
               <h5 class="card-title">學生與課程管理應用程式</h5>
               <p class="card-text">使用 Android Studio 開發的學生與課程管理應用程式。</p>
@@ -243,8 +330,8 @@
         </div>
         <div class="col">
           <div class="card h-100 portfolio-card">
-            <img src="images/project2.png" class="card-img-top" alt="投票系統" 
-                  style="height: 220px; object-fit: contain; background: #f8f1e9; padding: 10px;">
+            <img src="images/project2.png" class="card-img-top" alt="投票系統"
+              style="height: 220px; object-fit: contain; background: #f8f1e9; padding: 10px;">
             <div class="card-body">
               <h5 class="card-title">投票系統</h5>
               <p class="card-text">可新增投票活動與項目，使用 AJAX 與後端互動。</p>
@@ -255,11 +342,12 @@
     </div>
   </section>
 
-  <!-- 文章 -->
+  <!-- 📝 文章區塊 -->
   <section id="articles" class="py-5 bg-light">
     <div class="container">
       <h2 class="section-title text-center">文章</h2>
       <div class="row">
+        <!-- mx-auto: 讓主要文章區塊置中 -->
         <div class="col-lg-8 mx-auto">
           <div class="card p-4">
             <h5>資管的未來方向</h5>
@@ -268,20 +356,21 @@
               我覺得在這個時代，資管人的核心價值會產生轉變，不再只是代筆的翻譯，而是整間企業數位架構的導航與警察。
               未來，我們的工作可能會是引導非技術人員避免走入開發彎路，並化解資安漏洞百出的潛在風險。
               我們必須站在宏觀的視角，確保各部門自行開發的數位小工具不會互相衝突、產生資料孤島，而是能完美、安全地融入整間公司的資訊大架構中。
-              </p>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 獲獎榮譽 -->
+  <!-- 🏆 獲獎榮譽區塊 -->
   <section id="awards" class="py-5">
     <div class="container">
       <h2 class="section-title text-center">獲獎與榮譽</h2>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
           • 書卷獎獎學金（114年）
+          <!-- img-fluid: 圖片自動縮放、保持響應式 -->
           <img src="images/書卷獎獎狀.jpg" class="img-fluid my-3" alt="書卷獎">
         </li>
         <li class="list-group-item">
@@ -292,11 +381,12 @@
     </div>
   </section>
 
-  <!-- 活動照片 -->
+  <!-- 📷 活動照片區塊 -->
   <section id="activities" class="py-5 bg-light">
     <div class="container">
       <h2 class="section-title text-center">參與數位學伴照片</h2>
       <div class="row g-3">
+        <!-- col-md-4: 中型螢幕以上顯示 1/3 寬度 -->
         <div class="col-md-4">
           <img src="images/114_2.JPG" class="img-fluid rounded shadow" alt="活動照片">
         </div>
@@ -313,4 +403,5 @@
   </footer>
 
 </body>
+
 </html>
